@@ -27,14 +27,20 @@ apt-get update -y
 apt-get install hadoop-hdfs-namenode  hadoop-hdfs-datanode -y
 mkdir -p /var/lib/hadoop-hdfs/cache/hdfs/dfs/name
 cp /vagrant/media/core-site.xml /etc/hadoop/conf
+cp /vagrant/media/hdfs-site.xml /etc/hadoop/conf
 chown hdfs /var/lib/hadoop-hdfs/cache/hdfs/dfs/name
+/etc/init.d/hadoop-hdfs-namenode restart
+/etc/init.d/hadoop-hdfs-datanode restart
+mkdir -p /mnt/var/lib/hadoop-hdfs/cache/hdfs/dfs/name
+chown hdfs.hdfs /mnt/var/lib/hadoop-hdfs/cache/hdfs/dfs/name
+mkdir -p /mnt/dfs 
+chown hdfs.hdfs /mnt/dfs
 echo "Formatting namenode"
-#sudo -u hdfs cp /vagrant/media/bashrc /var/lib/hadoop-hdfs
-#sudo -u hdfs /usr/bin/hadoop namenode -format
 /etc/init.d/hadoop-hdfs-namenode init
 /etc/init.d/hadoop-hdfs-namenode restart
 /etc/init.d/hadoop-hdfs-datanode restart
-
+mkdir -p /mnt/staging
+chown hdfs /mnt/staging
 
 
 exit 0

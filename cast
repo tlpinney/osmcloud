@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [[ $1 == "init" ]]; then
+  ssh -i ~/.ssh/cloud.pem ubuntu@$CAST_HOST sudo mkdir -p /vagrant 
+  ssh -i ~/.ssh/cloud.pem ubuntu@$CAST_HOST sudo chown ubuntu /vagrant
+  scp -i ~/.ssh/cloud.pem -r media ubuntu@$CAST_HOST:/vagrant
+  scp -i ~/.ssh/cloud.pem -r seed.sh ubuntu@$CAST_HOST:
+  scp -i ~/.ssh/cloud.pem -r osm_planet.sh ubuntu@$CAST_HOST:
+elif [[ $1 = "cloud" ]]; then 
+  ssh -i ~/.ssh/cloud.pem ubuntu@$CAST_HOST sudo sh /home/ubuntu/seed.sh 
+elif [[ $1 == "ssh" ]]; then
+  ssh -i ~/.ssh/cloud.pem ubuntu@$CAST_HOST 
+else 
+  echo "Usage: ./cast {init, cloud, ssh}" 
+fi
+
+
+
+

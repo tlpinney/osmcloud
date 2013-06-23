@@ -70,10 +70,12 @@ SSH into the machine
 
     ssh -i ~/.ssh/cloud.pem ubuntu@ec2-x-x-x-x.compute-1.amazonaws.com
 
-Seed machine with 
+Install components 
     
- 
-
+    export CAST_HOST=ec2-x-x-x-x.compute-1.amazonaws.com
+    ./cast init 
+    ./cast ssh # you will now be connected to the host machine 
+    sudo sh ./seed.sh 
 
 
 
