@@ -51,9 +51,16 @@ List out the servers you have available
 
     knife ec2 server list 
     
-Create a server 
+Create an on demand server 
 
     knife ec2 server create --image=ami-d0f89fb9 --ssh-user=ubuntu --ssh-key=cloud --identity-file=~/.ssh/cloud.pem 
+
+
+Create a spot-priced server 
+Check the current rates, the rate may be too low. You will need to check the aws console if it gets stuck.
+
+    knife ec2 server create --image=ami-d0f89fb9 --flavor=m2.2xlarge --price=0.15 --ssh-user=ubuntu --ssh-key=cloud --identity-file=~/.ssh/cloud.pem
+
 
 Delete a server 
    
@@ -63,7 +70,8 @@ SSH into the machine
 
     ssh -i ~/.ssh/cloud.pem ubuntu@ec2-x-x-x-x.compute-1.amazonaws.com
 
-
+Seed machine with 
+    
  
 
 

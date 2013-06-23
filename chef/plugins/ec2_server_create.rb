@@ -37,6 +37,11 @@ class Chef
 
       attr_accessor :initial_sleep_delay
       attr_reader :server
+ 
+      option :price,
+        :short => "-p PRICE",
+        :long => "--price PRICE",
+        :description => "The maximium hourly USD price for instance"
 
       option :flavor,
         :short => "-f FLAVOR",
@@ -238,7 +243,23 @@ class Chef
         # For VPC EIP assignment we need the allocation ID so fetch full EIP details
         elastic_ip = connection.addresses.detect{|addr| addr if addr.public_ip == requested_elastic_ip}
 
-        @server = connection.servers.create(create_server_def)
+        # create a spot instance 
+        if config[:price]
+          spot_request_def = { :price => config[:price] }
+          spot_request_def.merge!(create_server_def)
+          spot_request = connection.spot_requests.create(spot_request_def)
+          puts "\n"
+          puts "#{ui.color("Instance ID", :cyan)}: #{spot_request.id}"
+          puts "#{ui.color("Request Type", :cyan)}: #{spot_request.request_type}"
+          puts "#{ui.color("Price", :cyan)}: #{spot_request.price}"
+          print "\n#{ui.color("Waiting for spot request", :magenta)}"
+          spot_request.wait_for { print "."; state == 'active' }
+          puts("\n")
+          
+          @server = connection.servers.get(spot_request.instance_id)
+        else 
+          @server = connection.servers.create(create_server_def)
+        end 
 
         hashed_tags={}
         tags.map{ |t| key,val=t.split('='); hashed_tags[key]=val} unless tags.nil?
