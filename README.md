@@ -29,7 +29,7 @@ aws_ssh_key_id is the keypair you created excluding the .pem extension
 
     knife[:aws_access_key_id] = "FIXME"
     knife[:aws_secret_access_key] = "FIXME"
-    knife[:aws_ssh_key_id] = "FIXME"
+    knife[:aws_ssh_key_id] = "cloud"
     knife[:chef_mode] = "solo"
  
 
@@ -40,6 +40,7 @@ and https://raw.github.com/gist/2049991/170e0fd2a5b9c5b8532a385d990d04400b182fb4
 
 
 From the castcloud base directory 
+
     mkdir -p ~/.chef/plugins/knife
     cp ./chef/plugins/ec2_server_create.rb ~/.chef/plugins/knife/ec2_server_create.rb
     
