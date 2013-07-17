@@ -34,8 +34,7 @@
     <name>dfs.datanode.data.dir</name>
     <value>/mnt/dfs</value>
   </property>
-  </property>
-    <property>
+  <property>
     <name>dfs.permissions</name>
     <value>false</value>
   </property> 
