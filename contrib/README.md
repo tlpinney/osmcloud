@@ -2,7 +2,7 @@
 
 ## Requirements 
 
-    Protobuf compilter 
+    Protobuf compiler 
     protobuf python package 
 
 
