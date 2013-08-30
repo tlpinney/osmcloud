@@ -57,31 +57,36 @@ while 1:
   pg.ParseFromString(decompress(b.zlib_data))
   #print pg
 
-  print "%s\t%s" % (index, bh.datasize)
+  #print "%s\t%s" % (index, bh.datasize)
   index += bh.datasize
 
+    
   # iterate over sequence of primitive groups
    
-  print pg.lat_offset
-  print pg.lon_offset
-  print pg.granularity
-  print pg.date_granularity
+  #print pg.lat_offset
+  #print pg.lon_offset
+  #print pg.granularity
+  #print pg.date_granularity
  
   for p in pg.primitivegroup:
-    #print p
-    #print dir(p)
-    #print type(p)
-    #print p.ListFields()
-    #print type(p.nodes)
-    #print p.nodes
 
     if p.nodes:
       # process nodes 
-      print "TODO implement processing nodes"
+      print >> sys.stderr, "TODO implement processing normal nodes"
       sys.exit()
+    elif p.ways:
+      print >> sys.stderr, "TODO implement processing ways"
+    elif p.relations:
+      print >> sys.stderr, "TODO implement processing relations"
     elif p.dense:
       nodes = []
-      idx = p.dense.id[0]
+      try:
+        idx = p.dense.id[0]
+      except:
+        print >> sys.stderr, repr(p.dense)
+        print >> sys.stderr, repr(p.nodes)
+        print >> sys.stderr, repr(p.ways)
+        sys.exit()
       nodes.append(idx)
       # extract the nodes  
       for nid in p.dense.id[1:]:
@@ -150,27 +155,37 @@ while 1:
         changesets.append(idx + cs)
         idx += cs 
         
-      # get the tags for each node, if it has one 
-      print 
+      # process the keys_vals      
+      # convert to python list 
+      keys_vals = list(p.dense.keys_vals)
+      
 
-      print len(nodes)
-      print len(versions)
-      print len(lats)
-      print len(lons)
-      print len(uids)
-      print len(user_sids)
-      print len(changesets)
-
-      #for kv in p.dense.keys_vals:
-      #  print kv
-      #  if kv == 0:
-      #    idx += 1 
-          
-      #  sys.exit()
-
-
+      kvs = []
+      s = []
+      for kv in keys_vals:
+        if kv == 0:
+          #kv.append(None)
+          # process the keyvalues on the stack 
+          kvs.append(zip(s[::2], s[1::2]))
+          s = []
+        else:
+          s.append(pg.stringtable.s[kv])
+        
   
+      # print out nodes in tsv and use pipe to colon to delimit keyvals, and 
+      # pipe to delimit multiple key vals
 
+      kl = []
+      for i in range(len(nodes)):
+        ks = ""
+        if not kvs[i] == []:
+          #print >> sys.stderr, kvs[i]
+          for k,v in kvs[i]:
+            kl.append("%s:%s" % (k, v))
+          ks = "|".join(kl)
+          #print >> sys.stderr, ks
+        
+        print "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % (nodes[i],versions[i],timestamps[i],uids[i],user_sids[i], changesets[i],lats[i],lons[i], ks)
 
 
 
