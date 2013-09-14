@@ -1,5 +1,13 @@
 #!/bin/bash
 
+
+if [ ! -d /vagrant/media ]; then
+  echo "Creating vagrant directory and moving media"
+  mkdir /vagrant 
+  mv media /vagrant
+fi 
+  
+
 echo "127.0.1.1 master" >> /etc/hosts
 
 apt-get update -y
@@ -71,7 +79,8 @@ sudo -u hdfs hadoop fs -chown ubuntu /user/ubuntu
 
 # set up impala and hive 
 apt-get install impala impala-shell impala-server impala-state-store hive hive-server -y
-cp /vagrant/media/impala/hive-site.xml /etc/hadoop/conf 
+cp /vagrant/media/impala/hive-site.xml /etc/impala 
+
 
 service impala-state-store start
 service impala-server start
