@@ -19,7 +19,39 @@
 
 <configuration>
   <property>
-    <name>fs.defaultFS</name>
-    <value>hdfs://localhost/</value>
+    <value>hdfs://master/</value>
+  </property>
+  <property>
+     <name>dfs.name.dir</name>
+     <value>/mnt/var/lib/hadoop-hdfs/cache/hdfs/dfs/name</value>
+  </property>
+  <property>
+     <name>dfs.webhdfs.enabled</name>
+     <value>true</value>
+  </property>
+  <property> 
+    <name>dfs.replication</name> 
+    <value>1</value> 
+  </property> 
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>/mnt/dfs</value>
+  </property>
+  <property>
+    <name>dfs.permissions</name>
+    <value>false</value>
+  </property> 
+  <property>
+    <name>dfs.client.read.shortcircuit</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>dfs.domain.socket.path</name>
+    <value>/var/run/hadoop-hdfs/dn._PORT</value>
+  </property>
+  <property>
+    <name>dfs.client.file-block-storage-locations.timeout</name>
+    <value>3000</value>
   </property>
 </configuration>
+
